@@ -1,0 +1,176 @@
+<HTML>
+<HEAD>
+
+<!-- <meta http-equiv="refresh" content="10" /> -->
+
+<script type="text/javascript">
+
+function analog(value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/analog?pin="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function init(pin,dir)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/init?pin="+pin+"&value="+dir, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function digin(pin)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/input?pin="+pin, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function digout(pin,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/output?pin="+pin+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function shiftout(data,clock,order,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/shift?data="+data+"&clock="+clock+"&order="+order+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+
+</script>
+
+
+</HEAD>
+
+<BODY>
+<h1>BeagleBone POST Server</h1>
+
+<script type="text/javascript"> 
+	init('P8_43','INPUT'); 
+	init('P8_45','INPUT');
+	init('P8_46','INPUT');
+	init('P8_3','OUTPUT');		// data 
+	init('P8_5','OUTPUT');		// clock
+	init('P8_16','OUTPUT');		// msp430 CS - LOW active
+	init('P8_14','OUTPUT');		// LCD CS - LOW active
+	digout('P8_14','HIGH');		// turn off LCD
+	digout('P8_16','HIGH');		// turn on MSP430
+</script>
+
+<iframe SRC="analog.html" WIDTH=300 HEIGHT=320 FRAMEBORDER=0 >
+<p>ANALOG #0 = <script type="text/javascript"> document.write(analog(0)); </script> <br/></p>
+<p>ANALOG #1 = <script type="text/javascript"> document.write(analog(1)); </script> <br/></p>
+<p>ANALOG #2 = <script type="text/javascript"> document.write(analog(2)); </script> <br/></p>
+<p>ANALOG #3 = <script type="text/javascript"> document.write(analog(3)); </script> <br/></p>
+<p>ANALOG #4 = <script type="text/javascript"> document.write(analog(4)); </script> <br/></p>
+<p>ANALOG #5 = <script type="text/javascript"> document.write(analog(5)); </script> <br/></p>
+<p>ANALOG #6 = <script type="text/javascript"> document.write(analog(6)); </script> <br/></p>
+<p>ANALOG #7 = <script type="text/javascript"> document.write(analog(7)); </script> <br/></p>
+</iframe>
+
+<iframe SRC="input.html" WIDTH=300 HEIGHT=320 FRAMEBORDER=0 >
+<p>DIGITAL INPUT P8_43 = <script type="text/javascript"> document.write(digin('P8_43')); </script> <br/></p>
+<p>DIGITAL INPUT P8_45 = <script type="text/javascript"> document.write(digin('P8_45')); </script> <br/></p>
+<p>DIGITAL INPUT P8_46 = <script type="text/javascript"> document.write(digin('P8_46')); </script> <br/></p>
+</iframe>
+
+<p/>BeagleBone USR3 LED : 
+<button type="button" onclick="digout('USR3','LOW')">LED OFF</button>
+<button type="button" onclick="digout('USR3','HIGH')">LED ON</button>
+
+<p/>
+<br/>
+
+MSP430 P1.0 LED :  
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x10'); shiftout('P8_3','P8_5','LSBFIRST','0x00'); digout('P8_16','HIGH')">LED OFF</button>
+
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x10'); shiftout('P8_3','P8_5','LSBFIRST','0x01'); digout('P8_16','HIGH')">LED ON</button>
+
+<p/>
+<br/>
+
+MSP430 P1.6 LED :  
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb0'); shiftout('P8_3','P8_5','LSBFIRST','0x00'); digout('P8_16','HIGH')">OFF</button>
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb1'); shiftout('P8_3','P8_5','LSBFIRST','0x9a'); digout('P8_16','HIGH')">20%</button>
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb3'); shiftout('P8_3','P8_5','LSBFIRST','0x34'); digout('P8_16','HIGH')">40%</button>
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb4'); shiftout('P8_3','P8_5','LSBFIRST','0xcea'); digout('P8_16','HIGH')">60%</button>
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb6'); shiftout('P8_3','P8_5','LSBFIRST','0x68'); digout('P8_16','HIGH')">80%</button>
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xb7'); shiftout('P8_3','P8_5','LSBFIRST','0xff'); digout('P8_16','HIGH')">ON</button>
+<p/>
+<br/>
+
+MSP430 P2.6 SERVO :  
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xf0'); shiftout('P8_3','P8_5','LSBFIRST','0x25'); digout('P8_16','HIGH')">SERVO FULL CW</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xf0'); shiftout('P8_3','P8_5','LSBFIRST','0x9d'); digout('P8_16','HIGH')">SERVO MID POINT</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0xf1'); shiftout('P8_3','P8_5','LSBFIRST','0x1d'); digout('P8_16','HIGH')">SERVO FULL CCW</button>
+
+<p/>
+<br/>
+
+MSP430 STEPPER : 
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x20'); shiftout('P8_3','P8_5','LSBFIRST','200'); digout('P8_16','HIGH')">CW FULL 200 steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x28'); shiftout('P8_3','P8_5','LSBFIRST','200'); digout('P8_16','HIGH')">CW HALF 200 steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x21'); shiftout('P8_3','P8_5','LSBFIRST','200'); digout('P8_16','HIGH')">CCW FULL 200 steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x29'); shiftout('P8_3','P8_5','LSBFIRST','200'); digout('P8_16','HIGH')">CCW HALF 200 steps</button>
+
+<br/>
+
+MSP430 STEPPER SPEED : 
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x30'); shiftout('P8_3','P8_5','LSBFIRST','2'); digout('P8_16','HIGH')">5ms steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x30'); shiftout('P8_3','P8_5','LSBFIRST','4'); digout('P8_16','HIGH')">10ms steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x30'); shiftout('P8_3','P8_5','LSBFIRST','6'); digout('P8_16','HIGH')">15ms steps</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x30'); shiftout('P8_3','P8_5','LSBFIRST','8'); digout('P8_16','HIGH')">20ms steps</button>
+
+<br/>
+
+MSP430 STEPPER FREE / LOCK :  
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x18'); shiftout('P8_3','P8_5','LSBFIRST','0x00'); digout('P8_16','HIGH')">FREE SPIN</button>
+
+<button type="button" onclick="digout('P8_16','LOW'); shiftout('P8_3','P8_5','LSBFIRST','0x18'); shiftout('P8_3','P8_5','LSBFIRST','0x01'); digout('P8_16','HIGH')">LOCK</button>
+
+</BODY>
+</HTML>

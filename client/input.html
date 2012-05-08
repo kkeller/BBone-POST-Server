@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+
+<meta http-equiv="refresh" content="1" /> 
+
+<script type="text/javascript">
+
+function analog(value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/analog?pin="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function init(pin,dir)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/init?pin="+pin+"&value="+dir, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function digin(pin)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/input?pin="+pin, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function digout(pin,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/output?pin="+pin+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function shiftout(data,clock,order,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/shift?data="+data+"&clock="+clock+"&order="+order+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+
+</script>
+
+
+</HEAD>
+
+<BODY>
+<h4>(updated every second)</h4>
+<p>DIGITAL INPUT P8_43 = <script type="text/javascript"> document.write(digin('P8_43')); </script> <br/></p>
+<p>DIGITAL INPUT P8_45 = <script type="text/javascript"> document.write(digin('P8_45')); </script> <br/></p>
+<p>DIGITAL INPUT P8_46 = <script type="text/javascript"> document.write(digin('P8_46')); </script> <br/></p>
+</BODY>
+</HTML>

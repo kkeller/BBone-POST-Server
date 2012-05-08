@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+
+<meta http-equiv="refresh" content="5" />
+
+<script type="text/javascript">
+
+function analog(value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/analog?pin="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function init(pin,dir)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/init?pin="+pin+"&value="+dir, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function digin(pin)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/input?pin="+pin, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+   patt1=/return:[0-9]+/g ;
+   var returnValue = string.substr(string.search(patt1)+7);
+   return returnValue;
+}
+
+function digout(pin,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/output?pin="+pin+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+function shiftout(data,clock,order,value)
+{
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET","http://192.168.1.119:8888/shift?data="+data+"&clock="+clock+"&order="+order+"&value="+value, false);
+   xmlhttp.onreadystatechange=function(){
+         if (xmlhttp.readyState==4 && xmlhttp.status==200){
+           string=xmlhttp.responseText;
+         }
+   }
+   xmlhttp.send();
+}
+
+</script>
+
+</HEAD>
+
+<BODY>
+<h4>(updated every 5 seconds)</h4>
+<p>ANALOG #0 = <script type="text/javascript"> document.write(analog(0)); </script> <br/></p>
+<p>ANALOG #1 = <script type="text/javascript"> document.write(analog(1)); </script> <br/></p>
+<p>ANALOG #2 = <script type="text/javascript"> document.write(analog(2)); </script> <br/></p>
+<p>ANALOG #3 = <script type="text/javascript"> document.write(analog(3)); </script> <br/></p>
+<p>ANALOG #4 = <script type="text/javascript"> document.write(analog(4)); </script> <br/></p>
+<p>ANALOG #5 = <script type="text/javascript"> document.write(analog(5)); </script> <br/></p>
+<p>ANALOG #6 = <script type="text/javascript"> document.write(analog(6)); </script> <br/></p>
+<p>ANALOG #7 = <script type="text/javascript"> document.write(analog(7)); </script> <br/></p>
+<p/>
+</BODY>
+</HTML>
