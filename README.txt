@@ -45,11 +45,11 @@ pinMode() interface:
  - http://<BBone IP>:8888/init?pin=[see below]&value=[INPUT,OUTPUT]
    example:  http://192.168.1.119:8888/init?pin=P8_43&value=OUTPUT
 
-digitalWrite() interface:
+digitalRead() interface:
  - http://<BBone IP>:8888/input?pin=[see below]
    example:  http://192.168.1.119:8888/input?pin=P8_42
 
-digitalRead() interface:
+digitalWrite() interface:
  - http://<BBone IP>:8888/output?pin=[see below]&value=[HIGH,LOW,0,1]
    example:  http://192.168.1.119:8888/output?pin=USR3&value=HIGH
 
